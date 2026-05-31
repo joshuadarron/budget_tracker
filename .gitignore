@@ -1,6 +1,8 @@
 credentials.json
 token.pickle
+plaid_items.json
 __pycache__/
 .env
 *.pyc
-
+.venv/
+exports/
