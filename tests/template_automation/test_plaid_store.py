@@ -70,6 +70,18 @@ def test_read_range_filters_by_date_inclusive_and_sorts(tmp_path):
     assert [r["transaction_id"] for r in rows] == ["t1", "t2"]
 
 
+def test_min_date_returns_earliest_or_none(tmp_path):
+    store = PlaidStore(tmp_path / "items.json")
+    assert store.min_date("chase") is None
+    store.upsert_transactions("chase", [
+        {"transaction_id": "a", "date": "2024-03-05", "amount": 1.0,
+         "name": "A", "pending": False},
+        {"transaction_id": "b", "date": "2024-01-09", "amount": 1.0,
+         "name": "B", "pending": False},
+    ])
+    assert store.min_date("chase") == "2024-01-09"
+
+
 def test_read_range_isolates_items(tmp_path):
     store = PlaidStore(tmp_path / "items.json")
     store.upsert_transactions("chase", [

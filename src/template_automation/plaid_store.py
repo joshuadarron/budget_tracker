@@ -64,6 +64,11 @@ class PlaidStore:
             ledger.pop(txn_id, None)
         self._save(data)
 
+    def min_date(self, item):
+        ledger = self._load().get(item, {}).get("transactions", {})
+        dates = [t["date"] for t in ledger.values()]
+        return min(dates) if dates else None
+
     def read_range(self, item, start_date, end_date):
         ledger = self._load().get(item, {}).get("transactions", {})
         rows = [t for t in ledger.values() if start_date <= t["date"] <= end_date]
