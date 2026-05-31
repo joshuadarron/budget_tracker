@@ -11,6 +11,11 @@ _HOSTS = {
 
 def build_client():
     """Build a PlaidApi from config. Sandbox and Production only."""
+    if not Config.PLAID_CLIENT_ID or not Config.PLAID_SECRET:
+        raise ValueError(
+            "Missing PLAID_CLIENT_ID or PLAID_SECRET in .env. Copy them from the "
+            "Plaid dashboard (Team Settings, Keys) into .env before linking."
+        )
     configuration = plaid.Configuration(
         host=_HOSTS[Config.PLAID_ENV],
         api_key={
