@@ -12,6 +12,7 @@ class Config:
     PLAID_CLIENT_ID = os.getenv("PLAID_CLIENT_ID")
     PLAID_SECRET = os.getenv("PLAID_SECRET")
     PLAID_ENV = os.getenv("PLAID_ENV", "sandbox")
+    PLAID_REDIRECT_URI = os.getenv("PLAID_REDIRECT_URI")
     PARENT_FOLDER_ID = os.getenv("PARENT_FOLDER_ID")
     PLAID_ITEMS = [s.strip() for s in os.getenv("PLAID_ITEMS", "").split(",") if s.strip()]
 
