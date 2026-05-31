@@ -1,4 +1,6 @@
-# Budget Tracker
+<p align="center">
+  <img src="assets/banner.svg" alt="Budget Tracker" width="100%"/>
+</p>
 
 <div align="center">
 

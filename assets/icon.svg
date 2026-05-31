@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 64 64">
+  <!--
+    Budget Tracker icon. Soft palette:
+      sage    #7fb89a   teal   #5aa39b   mint bg  #93c4ad / #74b1ac
+      amber   #e8c98c   ink    #2c4a3e   rows     #c2d8cc
+    Ledger sheet with a sage header, transaction rows, an ascending spend
+    trend, and a coin badge.
+  -->
+  <defs>
+    <linearGradient id="ic-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#93c4ad"/>
+      <stop offset="100%" stop-color="#74b1ac"/>
+    </linearGradient>
+    <linearGradient id="ic-bar" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#6fae93"/>
+      <stop offset="100%" stop-color="#5aa39b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="14" fill="url(#ic-bg)"/>
+
+  <!-- soft shadow under the sheet -->
+  <rect x="16" y="15" width="34" height="38" rx="5" fill="#1d3a30" opacity="0.10"/>
+
+  <!-- sheet -->
+  <rect x="15" y="13" width="34" height="38" rx="5" fill="#ffffff"/>
+  <!-- sage header band (square the lower edge with a second rect) -->
+  <rect x="15" y="13" width="34" height="10" rx="5" fill="#7fb89a"/>
+  <rect x="15" y="18" width="34" height="5" fill="#7fb89a"/>
+
+  <!-- transaction rows -->
+  <g stroke="#c2d8cc" stroke-width="2" stroke-linecap="round">
+    <line x1="20" y1="29" x2="44" y2="29"/>
+    <line x1="20" y1="34" x2="38" y2="34"/>
+  </g>
+
+  <!-- ascending spend trend -->
+  <g fill="url(#ic-bar)">
+    <rect x="20" y="43" width="4" height="4" rx="1.2"/>
+    <rect x="27" y="40" width="4" height="7" rx="1.2"/>
+    <rect x="34" y="37" width="4" height="10" rx="1.2"/>
+  </g>
+
+  <!-- coin badge -->
+  <circle cx="46" cy="15" r="7.5" fill="#e8c98c" stroke="#ffffff" stroke-width="2"/>
+  <text x="46" y="18.4" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif" font-size="9" font-weight="700" fill="#8a6a2e">$</text>
+</svg>
