@@ -82,8 +82,9 @@ def run(today=None):
         if summary:
             generated.append(summary)
 
+    if not Config.NOTIFY_EMAIL:
+        raise ValueError("Missing NOTIFY_EMAIL in .env (recipient for the summary email)")
     gmail = get_gmail_service()
-    address = gmail.users().getProfile(userId="me").execute()["emailAddress"]
-    mail.send_summary(gmail, address, address, generated)
+    mail.send_summary(gmail, Config.NOTIFY_EMAIL, Config.NOTIFY_EMAIL, generated)
     months = ", ".join(f"{g['year']:04d}-{g['month']:02d}" for g in generated)
     print(f"Generated and emailed: {months}")
