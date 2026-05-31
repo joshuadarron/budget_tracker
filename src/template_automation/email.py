@@ -22,6 +22,19 @@ PANEL = "#eaf3ee"
 PAGE_BG = "#f3f6f4"
 
 
+# Display names for institution slugs (PLAID_ITEMS entries). Unknown slugs fall
+# back to title case.
+INSTITUTION_NAMES = {
+    "chase": "Chase",
+    "schoolsfirst": "SchoolsFirst",
+    "jpmorgan": "JPMorgan",
+}
+
+
+def _institution_name(slug):
+    return INSTITUTION_NAMES.get(slug.lower(), slug.title())
+
+
 def sheet_url(file_id):
     return f"https://docs.google.com/spreadsheets/d/{file_id}"
 
@@ -39,7 +52,7 @@ def build_summary(generated):
         lines.append(_month_label(month))
         for inst in month["institutions"]:
             lines.append(
-                f"  {inst['institution']}: {inst['count']} transactions, "
+                f"  {_institution_name(inst['institution'])}: {inst['count']} transactions, "
                 f"${inst['total']:.2f}"
             )
         lines.append(f"  Sheet: {sheet_url(month['file_id'])}")
@@ -53,7 +66,7 @@ def _month_block(month):
     for inst in month["institutions"]:
         rows += (
             f'<tr>'
-            f'<td style="padding:2px 0;color:{INK};font-size:14px;">{inst["institution"]}</td>'
+            f'<td style="padding:2px 0;color:{INK};font-size:14px;">{_institution_name(inst["institution"])}</td>'
             f'<td align="right" style="padding:2px 0;color:{MUTED};font-size:14px;">'
             f'{inst["count"]} txns &nbsp;&middot;&nbsp; '
             f'<strong style="color:{INK};">${inst["total"]:.2f}</strong></td>'
@@ -96,10 +109,7 @@ def build_html(generated):
         <tr><td style="padding:36px 40px 8px 40px;" align="center">
           <!-- wordmark -->
           <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-            <td style="width:22px;height:22px;background:{SAGE};border-radius:50%;
-                       color:#ffffff;font-weight:700;font-size:13px;text-align:center;
-                       line-height:22px;">$</td>
-            <td style="padding-left:10px;font-size:20px;font-weight:700;color:{INK};
+            <td style="font-size:20px;font-weight:700;color:{INK};
                        letter-spacing:-0.3px;">Budget Tracker</td>
           </tr></table>
         </td></tr>

@@ -18,11 +18,18 @@ def test_sheet_url_from_file_id():
     assert mail.sheet_url("abc123") == "https://docs.google.com/spreadsheets/d/abc123"
 
 
+def test_institution_name_maps_known_and_titlecases_unknown():
+    assert mail._institution_name("chase") == "Chase"
+    assert mail._institution_name("schoolsfirst") == "SchoolsFirst"
+    assert mail._institution_name("jpmorgan") == "JPMorgan"
+    assert mail._institution_name("wellsfargo") == "Wellsfargo"
+
+
 def test_build_summary_lists_months_institutions_and_links():
     body = mail.build_summary(GENERATED)
     assert "2024-03" in body and "2024-04" in body
-    assert "chase: 12 transactions, $345.67" in body
-    assert "schoolsfirst: 4 transactions, $88.00" in body
+    assert "Chase: 12 transactions, $345.67" in body
+    assert "SchoolsFirst: 4 transactions, $88.00" in body
     assert "https://docs.google.com/spreadsheets/d/f1" in body
     assert "https://docs.google.com/spreadsheets/d/f2" in body
 
@@ -33,7 +40,7 @@ def test_build_html_has_branding_months_stats_and_buttons():
     assert "Budget Tracker" in html
     # months and per-institution stats
     assert "2024-03" in html and "2024-04" in html
-    assert "chase" in html and "$345.67" in html
+    assert "Chase" in html and "$345.67" in html
     assert "$88.00" in html
     # a button linking to each sheet
     assert mail.sheet_url("f1") in html
