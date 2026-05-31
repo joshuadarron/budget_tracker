@@ -6,7 +6,8 @@ from googleapiclient.discovery import build
 
 SCOPES = [
     'https://www.googleapis.com/auth/drive',
-    'https://www.googleapis.com/auth/spreadsheets'
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/gmail.send',
 ]
 
 def get_credentials():
@@ -33,4 +34,7 @@ def get_drive_service():
 
 def get_sheets_service():
     return build('sheets', 'v4', credentials=get_credentials())
+
+def get_gmail_service():
+    return build('gmail', 'v1', credentials=get_credentials())
 
