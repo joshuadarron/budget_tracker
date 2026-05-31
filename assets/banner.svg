@@ -3,6 +3,7 @@
     Budget Tracker banner. Soft palette:
       mint #dCEbe2  teal #cfe6e4  periwinkle #d8e4ee
       sage #7fb89a  deep teal #5aa39b  ink #2c4a3e  muted #5f8a78  amber #e8c98c
+      coin gold #e8c98c (face #f5e3b8 -> #d8b673, rim #cba258)
   -->
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -24,6 +25,35 @@
       <stop offset="45%" stop-color="#5aa39b" stop-opacity="0.14"/>
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="coin-face" cx="38%" cy="30%" r="78%">
+      <stop offset="0%" stop-color="#f5e3b8"/>
+      <stop offset="55%" stop-color="#e8c98c"/>
+      <stop offset="100%" stop-color="#d8b673"/>
+    </radialGradient>
+    <linearGradient id="bill-face" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e6f1ea"/>
+      <stop offset="100%" stop-color="#d3e7da"/>
+    </linearGradient>
+    <!-- soft mint dollar bill with a center $ medallion, reused and rotated -->
+    <g id="bill">
+      <rect x="-26" y="-15" width="52" height="30" rx="5"
+            fill="url(#bill-face)" stroke="#7fb89a" stroke-width="1.4"/>
+      <rect x="-21" y="-10.5" width="42" height="21" rx="3.5"
+            fill="none" stroke="#7fb89a" stroke-width="0.8" opacity="0.55"/>
+      <circle r="8.5" fill="#eaf3ee" stroke="#7fb89a" stroke-width="0.8" opacity="0.9"/>
+      <text x="0" y="4.5" text-anchor="middle"
+            font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif"
+            font-size="13" font-weight="700" fill="#2c7a5e">$</text>
+    </g>
+    <!-- soft gold coin, drawn small and reused at varying scale -->
+    <g id="coin">
+      <circle cx="0" cy="3.5" r="22" fill="#c28a3a" opacity="0.12"/>
+      <circle r="22" fill="url(#coin-face)" stroke="#cba258" stroke-width="1.5"/>
+      <circle r="15.5" fill="none" stroke="#bf9347" stroke-width="1" opacity="0.5"/>
+      <text x="0" y="7" text-anchor="middle"
+            font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif"
+            font-size="20" font-weight="700" fill="#b07e2f" opacity="0.85">$</text>
+    </g>
   </defs>
 
   <rect width="1200" height="412" fill="url(#bg)"/>
@@ -65,6 +95,25 @@
     <circle cx="1006" cy="246" r="0.6" opacity="0.14"/>
     <circle cx="142" cy="118" r="0.7" opacity="0.16"/>
     <circle cx="958" cy="118" r="0.7" opacity="0.16"/>
+  </g>
+
+  <!-- soft gold coins, clustered left and right of the centerpiece -->
+  <g opacity="0.85">
+    <use href="#coin" transform="translate(168 150) scale(1.05)"/>
+    <use href="#coin" transform="translate(118 206) scale(0.8)"/>
+    <use href="#coin" transform="translate(234 250) scale(0.62)"/>
+    <use href="#coin" transform="translate(1032 158) scale(1.05)"/>
+    <use href="#coin" transform="translate(1086 212) scale(0.8)"/>
+    <use href="#coin" transform="translate(966 252) scale(0.62)"/>
+  </g>
+
+  <!-- soft dollar bills, lightly scattered and rotated -->
+  <g opacity="0.7">
+    <use href="#bill" transform="translate(262 104) rotate(-12)"/>
+    <use href="#bill" transform="translate(78 298) rotate(8) scale(0.85)"/>
+    <use href="#bill" transform="translate(316 306) rotate(-6) scale(0.8)"/>
+    <use href="#bill" transform="translate(900 312) rotate(7) scale(0.9)"/>
+    <use href="#bill" transform="translate(1124 150) rotate(-10) scale(0.85)"/>
   </g>
 
   <!-- icon (minimalist clock, dollar sign at 12 o'clock) -->
