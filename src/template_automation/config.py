@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,7 +16,9 @@ class Config:
     PLAID_REDIRECT_URI = os.getenv("PLAID_REDIRECT_URI")
     PARENT_FOLDER_ID = os.getenv("PARENT_FOLDER_ID")
     NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL")
-    PLAID_ITEMS = [s.strip() for s in os.getenv("PLAID_ITEMS", "").split(",") if s.strip()]
+    PLAID_ITEMS = [
+        s.strip() for s in os.getenv("PLAID_ITEMS", "").split(",") if s.strip()
+    ]
 
     PLAID_ITEMS_FILE = "plaid_items.json"
     EXPORTS_DIR = "exports"

@@ -2,15 +2,24 @@ import base64
 
 from src.template_automation import email as mail
 
-
 GENERATED = [
-    {"year": 2024, "month": 3, "file_id": "f1", "institutions": [
-        {"institution": "chase", "count": 12, "total": 345.67},
-        {"institution": "schoolsfirst", "count": 4, "total": 88.0},
-    ]},
-    {"year": 2024, "month": 4, "file_id": "f2", "institutions": [
-        {"institution": "chase", "count": 7, "total": 100.0},
-    ]},
+    {
+        "year": 2024,
+        "month": 3,
+        "file_id": "f1",
+        "institutions": [
+            {"institution": "chase", "count": 12, "total": 345.67},
+            {"institution": "schoolsfirst", "count": 4, "total": 88.0},
+        ],
+    },
+    {
+        "year": 2024,
+        "month": 4,
+        "file_id": "f2",
+        "institutions": [
+            {"institution": "chase", "count": 7, "total": 100.0},
+        ],
+    },
 ]
 
 
@@ -49,8 +58,13 @@ def test_build_html_has_branding_months_stats_and_buttons():
 
 
 def test_build_raw_message_is_multipart_with_plain_and_html():
-    raw = mail.build_raw_message("me@example.com", "me@example.com", "Subj",
-                                 "<html><body>hi html</body></html>", "hi plain")
+    raw = mail.build_raw_message(
+        "me@example.com",
+        "me@example.com",
+        "Subj",
+        "<html><body>hi html</body></html>",
+        "hi plain",
+    )
     decoded = base64.urlsafe_b64decode(raw.encode()).decode()
     assert "Subject: Subj" in decoded
     assert "To: me@example.com" in decoded

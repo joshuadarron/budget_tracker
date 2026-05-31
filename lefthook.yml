@@ -1,0 +1,11 @@
+# Pre-push only. No pre-commit hooks by design: checks run before a push,
+# not on every commit. Install once with `lefthook install`.
+pre-push:
+  parallel: true
+  commands:
+    lint:
+      run: python -m ruff check src tests
+    format:
+      run: python -m ruff format --check src tests
+    test:
+      run: python -m pytest tests/ -q

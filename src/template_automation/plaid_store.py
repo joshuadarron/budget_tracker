@@ -32,7 +32,9 @@ class PlaidStore:
             json.dump(data, fh, indent=2)
 
     def _item(self, data, item):
-        return data.setdefault(item, {"access_token": None, "cursor": None, "transactions": {}})
+        return data.setdefault(
+            item, {"access_token": None, "cursor": None, "transactions": {}}
+        )
 
     def get_access_token(self, item):
         return self._load().get(item, {}).get("access_token")

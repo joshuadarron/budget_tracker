@@ -1,12 +1,12 @@
 import datetime
 
-from .config import Config
+from . import drive
+from . import email as mail
+from . import transactions as txns
 from .auth import get_drive_service, get_gmail_service
+from .config import Config
 from .plaid_client import build_client
 from .plaid_store import PlaidStore
-from . import drive
-from . import transactions as txns
-from . import email as mail
 from .sheets import write_transactions_to_sheet
 
 """Orchestration: sync every linked item, backfill any missing months, fill a
@@ -32,8 +32,12 @@ def _generate_month(drive_service, store, parent_folder_id, year, month):
     """Create and fill the sheet for one month across all items. Returns a
     summary dict, or None if there is nothing to record.
     """
-    year_folder_id = drive.find_or_create_year_folder(drive_service, parent_folder_id, year)
-    file_id = drive.copy_template(drive_service, parent_folder_id, year_folder_id, month)
+    year_folder_id = drive.find_or_create_year_folder(
+        drive_service, parent_folder_id, year
+    )
+    file_id = drive.copy_template(
+        drive_service, parent_folder_id, year_folder_id, month
+    )
 
     all_rows = []
     institutions = []
@@ -42,14 +46,21 @@ def _generate_month(drive_service, store, parent_folder_id, year, month):
         if rows:
             write_transactions_to_sheet(file_id, rows)
         all_rows.extend(rows)
-        institutions.append({
-            "institution": item,
-            "count": len(rows),
-            "total": round(sum(r["amount"] for r in rows), 2),
-        })
+        institutions.append(
+            {
+                "institution": item,
+                "count": len(rows),
+                "total": round(sum(r["amount"] for r in rows), 2),
+            }
+        )
 
     txns.write_export(Config.EXPORTS_DIR, year, month, all_rows)
-    return {"year": year, "month": month, "file_id": file_id, "institutions": institutions}
+    return {
+        "year": year,
+        "month": month,
+        "file_id": file_id,
+        "institutions": institutions,
+    }
 
 
 def run(today=None):
@@ -78,12 +89,16 @@ def run(today=None):
 
     generated = []
     for year, month in to_generate:
-        summary = _generate_month(drive_service, store, Config.PARENT_FOLDER_ID, year, month)
+        summary = _generate_month(
+            drive_service, store, Config.PARENT_FOLDER_ID, year, month
+        )
         if summary:
             generated.append(summary)
 
     if not Config.NOTIFY_EMAIL:
-        raise ValueError("Missing NOTIFY_EMAIL in .env (recipient for the summary email)")
+        raise ValueError(
+            "Missing NOTIFY_EMAIL in .env (recipient for the summary email)"
+        )
     gmail = get_gmail_service()
     mail.send_summary(gmail, Config.NOTIFY_EMAIL, Config.NOTIFY_EMAIL, generated)
     months = ", ".join(f"{g['year']:04d}-{g['month']:02d}" for g in generated)

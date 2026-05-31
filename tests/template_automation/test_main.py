@@ -14,14 +14,30 @@ def test_previous_month_crosses_year_boundary():
 
 def test_earliest_ledger_month_across_items(tmp_path):
     store = PlaidStore(tmp_path / "items.json")
-    store.upsert_transactions("chase", [
-        {"transaction_id": "a", "date": "2024-03-05", "amount": 1.0,
-         "name": "A", "pending": False},
-    ])
-    store.upsert_transactions("schoolsfirst", [
-        {"transaction_id": "b", "date": "2024-01-20", "amount": 1.0,
-         "name": "B", "pending": False},
-    ])
+    store.upsert_transactions(
+        "chase",
+        [
+            {
+                "transaction_id": "a",
+                "date": "2024-03-05",
+                "amount": 1.0,
+                "name": "A",
+                "pending": False,
+            },
+        ],
+    )
+    store.upsert_transactions(
+        "schoolsfirst",
+        [
+            {
+                "transaction_id": "b",
+                "date": "2024-01-20",
+                "amount": 1.0,
+                "name": "B",
+                "pending": False,
+            },
+        ],
+    )
     assert main.earliest_ledger_month(store, ["chase", "schoolsfirst"]) == (2024, 1)
 
 

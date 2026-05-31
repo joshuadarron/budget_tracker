@@ -66,12 +66,14 @@ def month_transactions(store, item, year, month):
             continue
         if row["amount"] <= 0:
             continue
-        out.append({
-            "date": row["date"],
-            "amount": row["amount"],
-            "description": row["name"],
-            "institution": item,
-        })
+        out.append(
+            {
+                "date": row["date"],
+                "amount": row["amount"],
+                "description": row["name"],
+                "institution": item,
+            }
+        )
     return out
 
 

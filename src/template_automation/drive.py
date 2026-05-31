@@ -1,4 +1,3 @@
-from .auth import get_drive_service
 from .sheets import delete_sheet_rows
 
 """Drive operations: year-folder management, template copy, and backfill gap
@@ -38,9 +37,12 @@ def list_existing_months(service, parent_folder_id):
         f"'{parent_folder_id}' in parents and "
         f"mimeType = 'application/vnd.google-apps.folder' and trashed = false"
     )
-    folders = service.files().list(
-        q=folder_query, fields="files(id, name)"
-    ).execute().get("files", [])
+    folders = (
+        service.files()
+        .list(q=folder_query, fields="files(id, name)")
+        .execute()
+        .get("files", [])
+    )
 
     months = set()
     for folder in folders:
@@ -48,9 +50,12 @@ def list_existing_months(service, parent_folder_id):
             continue
         year = int(folder["name"])
         file_query = f"'{folder['id']}' in parents and trashed = false"
-        files = service.files().list(
-            q=file_query, fields="files(id, name)"
-        ).execute().get("files", [])
+        files = (
+            service.files()
+            .list(q=file_query, fields="files(id, name)")
+            .execute()
+            .get("files", [])
+        )
         for f in files:
             if _is_month_name(f["name"]):
                 months.add((year, int(f["name"])))
@@ -62,7 +67,12 @@ def find_or_create_year_folder(service, parent_folder_id, year):
         f"'{parent_folder_id}' in parents and name = '{year}' and "
         f"mimeType = 'application/vnd.google-apps.folder' and trashed = false"
     )
-    folders = service.files().list(q=query, fields="files(id, name)").execute().get("files", [])
+    folders = (
+        service.files()
+        .list(q=query, fields="files(id, name)")
+        .execute()
+        .get("files", [])
+    )
     if folders:
         return folders[0]["id"]
     metadata = {
@@ -77,7 +87,12 @@ def find_or_create_year_folder(service, parent_folder_id, year):
 
 def _find_template(service, parent_folder_id):
     query = f"'{parent_folder_id}' in parents and name = 'Template' and trashed = false"
-    files = service.files().list(q=query, fields="files(id, name)").execute().get("files", [])
+    files = (
+        service.files()
+        .list(q=query, fields="files(id, name)")
+        .execute()
+        .get("files", [])
+    )
     return files[0]["id"] if files else None
 
 
@@ -91,11 +106,15 @@ def copy_template(service, parent_folder_id, year_folder_id, month):
         raise FileNotFoundError(f"No 'Template' file in folder {parent_folder_id}")
 
     filename = f"{month:02d}"
-    copied = service.files().copy(
-        fileId=template_id,
-        body={"name": filename, "parents": [year_folder_id]},
-        fields="id",
-    ).execute()
+    copied = (
+        service.files()
+        .copy(
+            fileId=template_id,
+            body={"name": filename, "parents": [year_folder_id]},
+            fields="id",
+        )
+        .execute()
+    )
     file_id = copied["id"]
     print(f"Copied 'Template' to '{filename}' (ID: {file_id})")
     delete_sheet_rows(file_id)

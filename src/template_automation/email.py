@@ -1,6 +1,6 @@
 import base64
-from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 """Notification email sent once after all sheets (current month plus any
 backfilled months) are generated. Sent via the Gmail API using the shared
@@ -65,12 +65,12 @@ def _month_block(month):
     rows = ""
     for inst in month["institutions"]:
         rows += (
-            f'<tr>'
+            f"<tr>"
             f'<td style="padding:2px 0;color:{INK};font-size:14px;">{_institution_name(inst["institution"])}</td>'
             f'<td align="right" style="padding:2px 0;color:{MUTED};font-size:14px;">'
-            f'{inst["count"]} txns &nbsp;&middot;&nbsp; '
+            f"{inst['count']} txns &nbsp;&middot;&nbsp; "
             f'<strong style="color:{INK};">${inst["total"]:.2f}</strong></td>'
-            f'</tr>'
+            f"</tr>"
         )
     return f"""
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
@@ -82,7 +82,7 @@ def _month_block(month):
             {rows}
           </table>
           <div style="text-align:center;margin-top:16px;">
-            <a href="{sheet_url(month['file_id'])}"
+            <a href="{sheet_url(month["file_id"])}"
                style="display:inline-block;background:{TEAL};color:#ffffff;
                       text-decoration:none;font-size:15px;font-weight:700;
                       padding:12px 28px;border-radius:24px;">Open {label} sheet</a>
@@ -95,8 +95,10 @@ def build_html(generated):
     labels = ", ".join(_month_label(m) for m in generated)
     plural = "sheet" if len(generated) == 1 else "sheets"
     blocks = "".join(_month_block(m) for m in generated)
-    font = ("-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,"
-            "'Helvetica Neue',Arial,sans-serif")
+    font = (
+        "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,"
+        "'Helvetica Neue',Arial,sans-serif"
+    )
     return f"""<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -128,7 +130,7 @@ def build_html(generated):
 
         <tr><td style="padding:28px 48px 0 48px;" align="center">
           <h1 style="margin:0;font-size:30px;line-height:1.25;font-weight:800;color:{INK};">
-            Your budget {plural}<br>{'is' if len(generated)==1 else 'are'} ready</h1>
+            Your budget {plural}<br>{"is" if len(generated) == 1 else "are"} ready</h1>
         </td></tr>
 
         <tr><td style="padding:16px 48px 8px 48px;" align="center">
@@ -174,6 +176,4 @@ def send_summary(service, sender, to, generated):
     raw = build_raw_message(
         sender, to, subject, build_html(generated), build_summary(generated)
     )
-    return service.users().messages().send(
-        userId="me", body={"raw": raw}
-    ).execute()
+    return service.users().messages().send(userId="me", body={"raw": raw}).execute()
